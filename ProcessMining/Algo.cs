@@ -33,6 +33,7 @@ namespace ProcessMining
         public List<EventPair> X_W { get; set; }
         public List<EventPair> Y_W { get; set; }
         public IEnumerable<ProcessOccurence> Occurences { get; set; }
+        public char[,] Matrix;
 
         public Algo(string ExcelFilePath)
         {
@@ -89,7 +90,7 @@ namespace ProcessMining
                       .Select(t => t.First())
                       .ToList();
             //Generate Matrix
-            var Matrix = GenerateMatrix();
+            Matrix = GenerateMatrix();
 
             GC.Collect();
 
@@ -329,13 +330,74 @@ namespace ProcessMining
                 }
                 retVal += " >";
                 var occured = Occurences.Where(t => t.Process == obj.First().ProcessId).First().Occurence;
-                retVal += occured > 1 ? "^" + occured : "";
+                retVal += occured > 1 ? "^" + occured + " " : "";
                 retVal += (processes.IndexOf(obj) == processes.Count() - 1 ? " " : ", ");
                 AlreadyOccured.Add(obj.First().ProcessId);
+            }
+            retVal = retVal.Trim().TrimEnd(',') + " } ";
+            return retVal;
+        }
+        public static string GetP_W(this Algo algo)
+        {
+            var pairs = algo.Y_W;
+            var retVal = " { i_W, o_W, ";
+
+            foreach (var obj in pairs)
+            {
+                retVal += "P({";
+                foreach (var events in obj.Left)
+                {
+                    retVal += events.EventName + (obj.Left.IndexOf(events) == obj.Left.Count() - 1 ? "" : ", ");
+                }
+                retVal += "},{";
+                foreach (var events in obj.Right)
+                {
+                    retVal += events.EventName + (obj.Right.IndexOf(events) == obj.Right.Count() - 1 ? "" : ", ");
+                }
+                retVal += "})" + (pairs.IndexOf(obj) == pairs.Count() - 1 ? "" : ", ");
             }
             retVal += " } ";
             return retVal;
         }
+        public static string GetF_W(this Algo algo)
+        {
+            var pairs = algo.Y_W;
+            var retVal = " { ";
+            foreach (var obj in algo.T_I)
+            {
+                retVal += "(i_W , " + obj.EventName + " ), ";
+            }
+            foreach (var obj in pairs)
+            {
 
+                var pathText = " P({";
+                foreach (var events in obj.Left)
+                {
+                    pathText += events.EventName + (obj.Left.IndexOf(events) == obj.Left.Count() - 1 ? "" : ", ");
+                }
+                pathText += "},{";
+                foreach (var events in obj.Right)
+                {
+                    pathText += events.EventName + (obj.Right.IndexOf(events) == obj.Right.Count() - 1 ? "" : ", ");
+                }
+                pathText += "})";
+
+                foreach (var events in obj.Left)
+                {
+                    retVal += "("+events.EventName + "," + pathText + "), "; 
+                }
+                foreach (var events in obj.Right)
+                {
+                    retVal += "(" + pathText + ", " + events.EventName + "), ";
+                }
+
+            }
+            foreach (var obj in algo.T_O)
+            {
+                retVal += "( " + obj.EventName + " , o_W ), ";
+            }
+            retVal = retVal.Trim().TrimEnd(',') + " } ";
+            return retVal;
+        }
     }
 }

@@ -52,6 +52,8 @@ namespace ProcessMining
                 lblT_O.Text = Algo.T_O.GetText();
                 lblX_W.Text = Algo.X_W.GetText();
                 lblY_W.Text = Algo.Y_W.GetText();
+                lblP_W.Text = Algo.GetP_W();
+                lblF_W.Text = Algo.GetF_W();
             }
             else
             {
@@ -59,6 +61,7 @@ namespace ProcessMining
             }
             Loader.Hide();
         }
+
         
     }
 }
