@@ -22,4 +22,21 @@ namespace ProcessMining.DataClasses
         public List<Event> Right { get; set; }
     }
 
+    public class EventGridItem
+    {
+        public string Activity { get; set; }
+        public string Originators { get; set; }
+        public int MinTime { get; set; }
+        public int AvgTime { get; set; }
+        public int MaxTime { get; set; }
+    }
+    public class TransitionGridItem
+    {
+        public string From { get; set; }
+        public string To { get; set; }
+        public int MinTime { get; set; }
+        public int AvgTime { get; set; }
+        public int MaxTime { get; set; }
+    }
+
 }

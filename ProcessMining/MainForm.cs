@@ -54,6 +54,7 @@ namespace ProcessMining
                 lblY_W.Text = Algo.Y_W.GetText();
                 lblP_W.Text = Algo.GetP_W();
                 lblF_W.Text = Algo.GetF_W();
+                gridEvents.DataSource = Algo.GetEventsReport();
             }
             else
             {

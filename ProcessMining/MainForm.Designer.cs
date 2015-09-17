@@ -63,6 +63,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.gridEvents = new System.Windows.Forms.DataGridView();
+            this.gridTransition = new System.Windows.Forms.DataGridView();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel6.SuspendLayout();
@@ -74,6 +76,9 @@
             this.tabPage2.SuspendLayout();
             this.panel8.SuspendLayout();
             this.panel7.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridEvents)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridTransition)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -431,12 +436,41 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.gridTransition);
+            this.tabPage3.Controls.Add(this.gridEvents);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(1288, 514);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Page 3";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // gridEvents
+            // 
+            this.gridEvents.AllowUserToAddRows = false;
+            this.gridEvents.AllowUserToDeleteRows = false;
+            this.gridEvents.AllowUserToResizeRows = false;
+            this.gridEvents.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.gridEvents.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridEvents.Dock = System.Windows.Forms.DockStyle.Left;
+            this.gridEvents.Location = new System.Drawing.Point(0, 0);
+            this.gridEvents.Name = "gridEvents";
+            this.gridEvents.RowHeadersVisible = false;
+            this.gridEvents.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.gridEvents.Size = new System.Drawing.Size(610, 514);
+            this.gridEvents.TabIndex = 0;
+            // 
+            // gridTransition
+            // 
+            this.gridTransition.AllowUserToAddRows = false;
+            this.gridTransition.AllowUserToDeleteRows = false;
+            this.gridTransition.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridTransition.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridTransition.Location = new System.Drawing.Point(610, 0);
+            this.gridTransition.Name = "gridTransition";
+            this.gridTransition.ReadOnly = true;
+            this.gridTransition.Size = new System.Drawing.Size(678, 514);
+            this.gridTransition.TabIndex = 1;
             // 
             // MainForm
             // 
@@ -475,6 +509,9 @@
             this.panel8.PerformLayout();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gridEvents)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridTransition)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -517,6 +554,8 @@
         private System.Windows.Forms.Label lblF_W;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.DataGridView gridEvents;
+        private System.Windows.Forms.DataGridView gridTransition;
 
     }
 }

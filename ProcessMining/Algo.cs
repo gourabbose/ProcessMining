@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProcessMining.Helpers;
+using System.Data;
 
 namespace ProcessMining
 {
@@ -398,6 +399,36 @@ namespace ProcessMining
             }
             retVal = retVal.Trim().TrimEnd(',') + " } ";
             return retVal;
+        }
+        public static List<EventGridItem> GetEventsReport(this Algo algo)
+        {
+            var retVal = new List<EventGridItem>();
+            foreach (var t in algo.T_W)
+            {
+                var obj = new EventGridItem { Activity = t.EventName, Originators = string.Empty };
+                var occurences = algo.Logs.Where(s => s.EventId == t.Id);
+                int totalTime = 0;
+                int minTime = int.MaxValue;
+                int maxTime = 0;
+                foreach (var occurence in occurences)
+                {
+                    obj.Originators += obj.Originators.Contains(occurence.Employee.Name) ? "" : occurence.Employee.Name + ", ";
+                    var time = (occurence.EndTime - occurence.StartTime).Milliseconds;
+                    totalTime += time;
+                    minTime = minTime > time ? time : minTime;
+                    maxTime = maxTime < time ? time : maxTime;
+                }
+                obj.Originators = obj.Originators.Trim().TrimEnd(',');
+                obj.MaxTime = maxTime;
+                obj.MinTime = minTime;
+                obj.AvgTime = totalTime / occurences.Count();
+                retVal.Add(obj);
+            }
+            return retVal;
+        }
+        public static List<TransitionGridItem> GetTransitionReport(this Algo algo)
+        {
+            return null;
         }
     }
 }
