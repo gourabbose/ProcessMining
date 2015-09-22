@@ -292,7 +292,7 @@ namespace ProcessMining
             var retVal = " { ";
             foreach (var obj in events)
             {
-                retVal += obj.EventName + (events.IndexOf(obj) == events.Count() - 1 ? "" : ", ");
+                retVal += obj.EventCode + (events.IndexOf(obj) == events.Count() - 1 ? "" : ", ");
             }
             retVal += " } ";
             return retVal;
@@ -305,12 +305,12 @@ namespace ProcessMining
                 retVal += "({";
                 foreach (var events in obj.Left)
                 {
-                    retVal += events.EventName + (obj.Left.IndexOf(events) == obj.Left.Count() - 1 ? "" : ", ");
+                    retVal += events.EventCode + (obj.Left.IndexOf(events) == obj.Left.Count() - 1 ? "" : ", ");
                 }
                 retVal += "},{";
                 foreach (var events in obj.Right)
                 {
-                    retVal += events.EventName + (obj.Right.IndexOf(events) == obj.Right.Count() - 1 ? "" : ", ");
+                    retVal += events.EventCode + (obj.Right.IndexOf(events) == obj.Right.Count() - 1 ? "" : ", ");
                 }
                 retVal += "})" + (pairs.IndexOf(obj) == pairs.Count() - 1 ? "" : ", ");
             }
@@ -327,7 +327,7 @@ namespace ProcessMining
                 retVal += "< ";
                 foreach (var item in obj)
                 {
-                    retVal += item.Event.EventName;
+                    retVal += item.Event.EventCode;
                 }
                 retVal += " >";
                 var occured = Occurences.Where(t => t.Process == obj.First().ProcessId).First().Occurence;
@@ -348,12 +348,12 @@ namespace ProcessMining
                 retVal += "P({";
                 foreach (var events in obj.Left)
                 {
-                    retVal += events.EventName + (obj.Left.IndexOf(events) == obj.Left.Count() - 1 ? "" : ", ");
+                    retVal += events.EventCode + (obj.Left.IndexOf(events) == obj.Left.Count() - 1 ? "" : ", ");
                 }
                 retVal += "},{";
                 foreach (var events in obj.Right)
                 {
-                    retVal += events.EventName + (obj.Right.IndexOf(events) == obj.Right.Count() - 1 ? "" : ", ");
+                    retVal += events.EventCode + (obj.Right.IndexOf(events) == obj.Right.Count() - 1 ? "" : ", ");
                 }
                 retVal += "})" + (pairs.IndexOf(obj) == pairs.Count() - 1 ? "" : ", ");
             }
@@ -366,7 +366,7 @@ namespace ProcessMining
             var retVal = " { ";
             foreach (var obj in algo.T_I)
             {
-                retVal += "(i_W , " + obj.EventName + " ), ";
+                retVal += "(i_W , " + obj.EventCode + " ), ";
             }
             foreach (var obj in pairs)
             {
@@ -374,28 +374,28 @@ namespace ProcessMining
                 var pathText = " P({";
                 foreach (var events in obj.Left)
                 {
-                    pathText += events.EventName + (obj.Left.IndexOf(events) == obj.Left.Count() - 1 ? "" : ", ");
+                    pathText += events.EventCode + (obj.Left.IndexOf(events) == obj.Left.Count() - 1 ? "" : ", ");
                 }
                 pathText += "},{";
                 foreach (var events in obj.Right)
                 {
-                    pathText += events.EventName + (obj.Right.IndexOf(events) == obj.Right.Count() - 1 ? "" : ", ");
+                    pathText += events.EventCode + (obj.Right.IndexOf(events) == obj.Right.Count() - 1 ? "" : ", ");
                 }
                 pathText += "})";
 
                 foreach (var events in obj.Left)
                 {
-                    retVal += "("+events.EventName + "," + pathText + "), "; 
+                    retVal += "(" + events.EventCode + "," + pathText + "), ";
                 }
                 foreach (var events in obj.Right)
                 {
-                    retVal += "(" + pathText + ", " + events.EventName + "), ";
+                    retVal += "(" + pathText + ", " + events.EventCode + "), ";
                 }
 
             }
             foreach (var obj in algo.T_O)
             {
-                retVal += "( " + obj.EventName + " , o_W ), ";
+                retVal += "( " + obj.EventCode + " , o_W ), ";
             }
             retVal = retVal.Trim().TrimEnd(',') + " } ";
             return retVal;
@@ -428,7 +428,45 @@ namespace ProcessMining
         }
         public static List<TransitionGridItem> GetTransitionReport(this Algo algo)
         {
-            return null;
+            List<KeyValuePair<int, int>> dictTransitions = new List<KeyValuePair<int, int>>();
+            List<TransitionGridItem> listTransactions = new List<TransitionGridItem>();
+
+            foreach (var process in algo.AllProcess)
+            {
+                for (int i = 0; i < process.Count - 1; i++)
+                {
+                    var from = process.ElementAt(i).EventId;
+                    var to = process.ElementAt(i + 1).EventId;
+                    var fromEvent = algo.T_W.Where(t => t.Id == from).First();
+                    var toEvent = algo.T_W.Where(t => t.Id == to).First();
+
+                    var time = (process.ElementAt(i + 1).StartTime - process.ElementAt(i).EndTime).Milliseconds;
+                    var tran = new KeyValuePair<int, int>(from, to);
+                    if (!dictTransitions.Contains(tran))
+                    {
+                        dictTransitions.Add(tran);
+                        listTransactions.Add(new TransitionGridItem
+                        {
+                            From = fromEvent.EventName,
+                            To = toEvent.EventName,
+                            MaxTime = time,
+                            MinTime = time,
+                            Occurance = 1,
+                            TotalTime = time
+                        });
+                    }
+                    else
+                    {
+                        var objTran = listTransactions.Where(t => t.From == fromEvent.EventName && t.To == toEvent.EventName).First();
+                        objTran.MaxTime = objTran.MaxTime < time ? time : objTran.MaxTime;
+                        objTran.MinTime = objTran.MinTime > time ? time : objTran.MinTime;
+                        objTran.TotalTime += time;
+                        objTran.Occurance++;
+                    }
+                }
+            }
+            listTransactions.ForEach(t => t.AvgTime = t.TotalTime / t.Occurance);
+            return listTransactions;
         }
     }
 }

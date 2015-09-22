@@ -55,6 +55,9 @@ namespace ProcessMining
                 lblP_W.Text = Algo.GetP_W();
                 lblF_W.Text = Algo.GetF_W();
                 gridEvents.DataSource = Algo.GetEventsReport();
+                gridTransition.DataSource = Algo.GetTransitionReport();
+                gridTransition.Columns["TotalTime"].Visible = false;
+                gridTransition.Columns["Occurance"].Visible = false;
             }
             else
             {

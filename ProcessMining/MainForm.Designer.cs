@@ -464,10 +464,12 @@
             // 
             this.gridTransition.AllowUserToAddRows = false;
             this.gridTransition.AllowUserToDeleteRows = false;
+            this.gridTransition.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.gridTransition.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridTransition.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridTransition.Location = new System.Drawing.Point(610, 0);
             this.gridTransition.Name = "gridTransition";
+            this.gridTransition.RowHeadersVisible = false;
             this.gridTransition.ReadOnly = true;
             this.gridTransition.Size = new System.Drawing.Size(678, 514);
             this.gridTransition.TabIndex = 1;

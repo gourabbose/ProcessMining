@@ -11,8 +11,8 @@ namespace ProcessMining.DataClasses
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string EventCode { get; set; }
         public string EventName { get; set; }
+        public string EventCode { get; set; }
         public string EventDescription { get; set; }
     }
 
@@ -37,6 +37,8 @@ namespace ProcessMining.DataClasses
         public int MinTime { get; set; }
         public int AvgTime { get; set; }
         public int MaxTime { get; set; }
+        public int TotalTime { get; set; }
+        public int Occurance { get; set; }
     }
 
 }
